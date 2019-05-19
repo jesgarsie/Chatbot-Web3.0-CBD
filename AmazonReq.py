@@ -21,8 +21,8 @@ def funcion(param):
 	key = str
 
 	amazon_set = []
-	amazon_access_key = 'AKIAIEQUIWQKHR7L7HYA'
-	amazon_secret_key = b'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'
+	amazon_access_key = 'AQUITUACCESSKEY'
+	amazon_secret_key = b'AQUITUSECRETKEY'
 	m_params = {
 		'Keywords': key,
 		'Operation': 'ItemSearch',
@@ -52,44 +52,31 @@ def funcion(param):
 		hmac.new(key=amazon_secret_key, msg=string_to_sign.encode(), digestmod=hashlib.sha256).digest())
 	amazon_request_url = 'http://' + host + uri + '?' + canonicalized_query + '&Signature=' + signature.decode().replace(
 		'+', '%2B').replace('=', '%3D')
-	print(amazon_request_url)
+	try:
+		amazon_r = requests.get(amazon_request_url)
+		print (amazon_r.content)
+	except Exception:
+		print(amazon_r.content)
 
 invocacion = ('Botti', 'botti', 'boti', 'Boti')
 str_saludo_inicial = "(Si quiere parar el asistente escriba 'salir') \nHola, soy Botti, tu asistente personal de compras. Para invocarme solo necesitas escribit Botti...\n>>>"
-
-#Inicio
-comp_invocacion = input(str_saludo_inicial)
 
 encendido = False
 continua = True
 exit = False
 
-i = 0
 
-while continua:
-	if(i == 0):
-		frase = input(str_saludo_inicial)
-	else:
-		frase = input()
 
-	if frase.__contains__('salir'):
-		print("Adios.")
-		continua = False
-		i+1
-		break
-	else:
-		for plbr in invocacion:
-			if frase.__contains__(plbr):
-				encendido = True
-				frase = frase.replace(plbr, '')
-				break
-		if encendido:
-			funcion(frase)
-			i=0
-			encendido = False
-		if encendido == False:
-			i+1
-			input("Lo siento, no puedo entender tu petición. Recuerda invocarme con 'Botti'.\n>>>")
+frase = input(str_saludo_inicial)
+for plbr in invocacion:
+	if frase.__contains__(plbr):
+		encendido = True
+		frase = frase.replace(plbr, '')
+
+if encendido:
+	funcion(frase)
+else:
+	print("Lo siento, no puedo entenderte")
 
 
 
